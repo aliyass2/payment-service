@@ -31,3 +31,20 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment & Secrets ###
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+
+### Logs ###
+*.log
+logs/
+
+### OS ###
+.DS_Store
+Thumbs.db
