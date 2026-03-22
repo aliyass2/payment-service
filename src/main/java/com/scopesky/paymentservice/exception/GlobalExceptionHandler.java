@@ -14,9 +14,34 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(PaymentNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFound(PaymentNotFoundException ex) {
+    @ExceptionHandler({
+            UserNotFoundException.class,
+            WalletNotFoundException.class,
+            TransactionNotFoundException.class,
+            TransferNotFoundException.class,
+            PaymentMethodNotFoundException.class
+    })
+    public ResponseEntity<Map<String, Object>> handleNotFound(RuntimeException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<Map<String, Object>> handleInsufficientFunds(InsufficientFundsException ex) {
+        return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    }
+
+    @ExceptionHandler({
+            WalletFrozenException.class,
+            WalletCurrencyMismatchException.class,
+            DuplicateIdempotencyKeyException.class
+    })
+    public ResponseEntity<Map<String, Object>> handleConflict(RuntimeException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidOperation(InvalidOperationException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
